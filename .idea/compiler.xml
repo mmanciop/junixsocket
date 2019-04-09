@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="junixsocket-common" />
+        <module name="junixsocket-core" />
+        <module name="junixsocket-demo" />
+        <module name="junixsocket-mysql" />
+        <module name="junixsocket-native" />
+        <module name="junixsocket-native-common" />
+        <module name="junixsocket-native-custom" />
+        <module name="junixsocket-rmi" />
+        <module name="junixsocket-server" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="junixsocket-common" target="9" />
+      <module name="junixsocket-core" target="9" />
+      <module name="junixsocket-demo" target="9" />
+      <module name="junixsocket-dist" target="9" />
+      <module name="junixsocket-mysql" target="9" />
+      <module name="junixsocket-native" target="9" />
+      <module name="junixsocket-native-common" target="9" />
+      <module name="junixsocket-native-custom" target="9" />
+      <module name="junixsocket-parent" target="9" />
+      <module name="junixsocket-rmi" target="9" />
+      <module name="junixsocket-server" target="9" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="junixsocket-common" options="-h" />
+    </option>
+  </component>
+</project>

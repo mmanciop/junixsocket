@@ -58,7 +58,7 @@ In contrast to other implementations, junixsocket extends the Java Sockets API (
   <properties>
     <kohlschutter.project.base.directory>${project.basedir}</kohlschutter.project.base.directory>
     <kohlschutter.parent.directory>${project.parent.basedir}</kohlschutter.parent.directory>
-    <java.version>9</java.version>
+    <!-- <java.version>9</java.version> -->
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
     <slf4j.version>1.7.25</slf4j.version>
@@ -202,12 +202,100 @@ In contrast to other implementations, junixsocket extends the Java Sockets API (
     </profile>
 
     <profile>
-      <id>java8-support</id>
+      <id>java8-only</id>
       <activation>
-        <!-- Java 8 support is enabled by default, unless you're in Eclipse,
-          which doesn't support compiling with multiple compilers -->
+        <property>
+          <name>java8-only</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.5.1</version>
+            <configuration>
+              <source>1.8</source>
+              <target>1.8</target>
+              <excludes>
+                <exclude>module-info.java</exclude>
+              </excludes>
+              <testExcludes>
+                <testExclude>**/*</testExclude>
+              </testExcludes>
+            </configuration>
+          </plugin>
+          <plugin>
+            <!-- Ugly workaround due to some Javadoc issues -->
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>attach-javadoc</id>
+                <phase>none</phase>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+              <execution>
+                <!-- module-info.class needs to be in the root of the jar -->
+                <id>copy-module-info-to-root-level</id>
+                <phase>prepare-package</phase>
+                <goals>
+                  <goal>copy-resources</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                  <resources>
+                    <resource>
+                      <directory>${project.build.outputDirectory}/META-INF/versions/9</directory>
+                      <includes>
+                        <include>module-info.class</include>
+                      </includes>
+                    </resource>
+                  </resources>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.1.1</version>
+            <configuration>
+              <archive>
+                <manifestEntries>
+                  <Multi-Release>true</Multi-Release>
+                </manifestEntries>
+              </archive>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>eclipse</id>
+      <!-- Java 8 support is enabled by default, unless you're in Eclipse,
+        which doesn't support compiling with multiple compilers -->
+      <activation>
         <property>
           <name>!m2e.version</name>
+        </property>
+      </activation>
+      <properties>
+        <java8.only>true</java8.only>
+      </properties>
+    </profile>
+    <profile>
+      <id>java8-support</id>
+      <activation>
+        <property>
+          <name>java8.only</name>
+          <value>false</value>
         </property>
       </activation>
       <build>
